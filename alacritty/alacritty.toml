@@ -8,14 +8,14 @@ args = [
 ]
 
 [window]
-opacity = 0.95
-padding = { x = 10, y = 10 }
+opacity = 0.8
+padding = { x = 20, y = 20 }
 dynamic_padding = true
 
 [font]
-normal = { family = "Iosevka Nerd Font" }
-bold = { family = "Iosevka Nerd Font", style = "Bold" }
-size = 14.0
+normal = { family = "JetBrainsMono NF" }
+bold = { family = "JetBrainsMono NF", style = "Bold" }
+size = 16.0
 offset.y = 2
 
 [selection]
@@ -23,7 +23,7 @@ save_to_clipboard = true
 
 [cursor]
 style = { shape = "Beam", blinking = "Always" }
-blink_interval = 400
+blink_interval = 100
 blink_timeout = 0
 
 [terminal]
@@ -33,4 +33,4 @@ osc52 = "CopyPaste"
 history = 50000
 
 [general]
-import = ["~/.config/alacritty/plugins/papercolor_dark.toml"]
+import = ["~/.config/alacritty/plugins/alabaster_dark.toml"]
