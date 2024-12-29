@@ -24,7 +24,6 @@ sudo apt install -y \
   inkscape \
   krita \
   obs-studio \
-  simplescreenrecorder \
   ttf-mscorefonts-installer \
   vlc
 
@@ -134,7 +133,6 @@ cp -rv pulse.conf ~/.config/pulse/daemon.conf
 cp -rv alacritty ~/.config/
 cp -rv darktable ~/.config/
 cp -rv konsole ~/.local/share/
-cp -rv SimpleScreenRecorder/.ssr ~/
 
 # SET FISH AS DEFAULT SHELL
 chsh -s $(which fish)

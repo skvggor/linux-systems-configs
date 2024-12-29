@@ -24,7 +24,6 @@ sudo pacman -S --noconfirm --needed \
   inkscape \
   krita \
   obs-studio \
-  simplescreenrecorder \
   vlc
 
 # SYSTEM AND DEVELOPMENT
@@ -123,7 +122,6 @@ cp -rv pulse.conf ~/.config/pulse/daemon.conf
 cp -rv alacritty ~/.config/
 cp -rv darktable ~/.config/
 cp -rv konsole ~/.local/share/
-cp -rv SimpleScreenRecorder/.ssr ~/
 
 # SET FISH AS DEFAULT SHELL
 chsh -s "$(which fish)"
