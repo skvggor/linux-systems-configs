@@ -2,39 +2,63 @@
 
 set -euo pipefail
 
-mkdir -pv ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
-mkdir -pv ~/Google\ Drive
-mkdir -pv ~/Projects/{personal,work}
+mkdir -pv \
+  ~/Google\ Drive \
+  ~/Projects/{personal,work} \
+  ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
 
-sudo pacman -Syu --needed base-devel git curl
+sudo pacman -Syu --noconfirm
 
-sudo fc-cache -f -v
+# ESSENTIALS
+sudo pacman -S --noconfirm --needed \
+  base-devel \
+  unzip \
+  curl \
+  git
 
-sudo pacman -S --needed \
+# DESIGN AND MULTIMEDIA
+sudo pacman -S --noconfirm --needed \
   cheese \
-  cmake \
-  cmatrix \
   darktable \
-  fish \
-  flameshot \
   gimp \
-  go \
   inkscape \
-  jq \
-  konsole \
   krita \
-  micro \
-  net-tools \
-  nodejs \
-  npm \
   obs-studio \
-  solaar \
+  simplescreenrecorder \
   vlc
 
-if ! command -v unzip &>/dev/null; then
-  sudo pacman -S --needed unzip
-fi
+# SYSTEM AND DEVELOPMENT
+sudo pacman -S --noconfirm --needed \
+  cmake \
+  cmatrix \
+  fish \
+  go \
+  jq \
+  konsole \
+  lsd \
+  micro \
+  net-tools \
+  nodejs
 
+# - docker
+sudo pacman -S --noconfirm --needed \
+  docker
+
+sudo systemctl start docker.service
+# sudo systemctl enable docker.service
+# sudo chmod 666 /var/run/docker.sock
+# sudo groupadd docker
+# sudo usermod -aG docker $USER
+# newgrp docker
+
+# // ------------------------------
+
+# - starship
+sudo pacman -S --noconfirm --needed starship
+# // ------------------------------
+
+# - dbeaver
+# (dbeaver is in the AUR, so we need yay; install yay if missing)
 if ! command -v yay &>/dev/null; then
   cd /tmp
   git clone https://aur.archlinux.org/yay.git
@@ -42,50 +66,54 @@ if ! command -v yay &>/dev/null; then
   makepkg -si --noconfirm
 fi
 
-yay -S --noconfirm \
-  lsd \
-  ttf-ms-fonts \
-  microsoft-edge-stable-bin \
-  google-chrome \
-  visual-studio-code-insiders-bin \
-  rio-git \
-  atuin \
-  nitch
+yay -S --noconfirm dbeaver-ce
+# // ------------------------------
 
-sudo pacman -S --needed docker
-# sudo systemctl start docker.service
-# sudo systemctl enable docker.service
-# sudo groupadd docker || true
-# sudo usermod -aG docker $USER
-# newgrp docker
+# - nitch
+yay -S --noconfirm nitch
+# // ------------------------------
 
-sudo pacman -S --needed starship
-
-sudo pacman -S --needed rustup
+# - rustup
+sudo pacman -S --noconfirm --needed rustup
 rustup default stable
 
-sudo pacman -S --needed zellij zoxide bat alacritty
+# - cargo packages
+sudo pacman -S --noconfirm --needed \
+  cmake \
+  pkg-config \
+  freetype2 \
+  fontconfig \
+  libxcb \
+  libxkbcommon \
+  python
 
-sudo npm install -g n npm
-sudo n lts
+cargo install \
+  alacritty \
+  bat \
+  zellij \
+  zoxide
+# // ------------------------------
 
-sudo npm install -g begynner \
-  easy-rename \
-  gtop \
-  localtunnel \
-  svgo \
-  vercel
+# - atuin
+yay -S --noconfirm atuin
+# // ------------------------------
 
-current_dir=$(pwd)
+# -- Alacritty config
+git clone https://github.com/alacritty/alacritty ~/temp/alacritty
+cd ~/temp/alacritty
+sudo cp -rv extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+sudo desktop-file-install extra/linux/Alacritty.desktop
+cd ~
+# // ------------------------------
 
-mkdir -p ~/temp
-wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
-unzip ~/temp/nerd-fonts.zip -d ~/temp
-cd ~/temp/nerd-fonts-master
-bash install.sh
+sudo update-desktop-database
 
-cd $current_dir
+# UTILITIES
+sudo pacman -S --noconfirm --needed \
+  flameshot \
+  solaar
 
+# INSTALL CONFIGURATIONS
 cp -rv .gitconfig ~/.gitconfig
 cp -rv starship.toml ~/.config/
 cp -rv fish/config.fish ~/.config/fish/
@@ -97,11 +125,45 @@ cp -rv darktable ~/.config/
 cp -rv konsole ~/.local/share/
 cp -rv SimpleScreenRecorder/.ssr ~/
 
-unzip -o obs-studio.zip -d ~/.config/obs-studio
+# SET FISH AS DEFAULT SHELL
+chsh -s "$(which fish)"
 
-chsh -s $(which fish)
+# NPM PACKAGES
+sudo pacman -S --noconfirm --needed npm
+sudo npm i -g n npm
 
-sudo update-desktop-database
+# - set nodejs to LTS
+sudo n lts
+
+sudo npm i -g \
+  gtop \
+  localtunnel \
+  svgo \
+  vercel
+
+# - microsoft edge
+yay -S --noconfirm microsoft-edge-stable-bin
+# // ------------------------------
+
+# - google chrome
+yay -S --noconfirm google-chrome
+# // ------------------------------
+
+# - visual studio code insiders
+yay -S --noconfirm visual-studio-code-insiders-bin
+# // ------------------------------
+
+# - nerd fonts
+current_dir=$(pwd)
+mkdir -p ~/temp
+wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
+unzip ~/temp/nerd-fonts.zip -d ~/temp
+cd ~/temp/nerd-fonts-master
+bash install.sh
+cd "$current_dir"
+# // ------------------------------
+
+sudo fc-cache -f -v
 
 rm -rf ~/temp
 
