@@ -7,17 +7,16 @@ mkdir -pv \
   ~/Projects/{personal,work} \
   ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
 
-sudo pacman -Syu --noconfirm
+sudo dnf -y update
 
 # ESSENTIALS
-sudo pacman -S --noconfirm --needed \
-  base-devel \
-  unzip \
+sudo dnf -y install \
   curl \
-  git
+  git \
+  unzip
 
 # DESIGN AND MULTIMEDIA
-sudo pacman -S --noconfirm --needed \
+sudo dnf -y install \
   cheese \
   darktable \
   gimp \
@@ -27,11 +26,11 @@ sudo pacman -S --noconfirm --needed \
   vlc
 
 # SYSTEM AND DEVELOPMENT
-sudo pacman -S --noconfirm --needed \
+sudo dnf -y install \
   cmake \
   cmatrix \
   fish \
-  go \
+  golang \
   jq \
   konsole \
   lsd \
@@ -40,10 +39,17 @@ sudo pacman -S --noconfirm --needed \
   nodejs
 
 # - docker
-sudo pacman -S --noconfirm --needed \
-  docker
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 
-sudo systemctl start docker.service
+sudo dnf -y install \
+  docker-ce \
+  docker-ce-cli \
+  containerd.io \
+  docker-buildx-plugin \
+  docker-compose-plugin
+
+# sudo systemctl start docker.service
 # sudo systemctl enable docker.service
 # sudo chmod 666 /var/run/docker.sock
 # sudo groupadd docker
@@ -53,48 +59,47 @@ sudo systemctl start docker.service
 # // ------------------------------
 
 # - starship
-sudo pacman -S --noconfirm --needed starship
+curl -sS https://starship.rs/install.sh | sh
 # // ------------------------------
 
-# - dbeaver
-# (dbeaver is in the AUR, so we need yay; install yay if missing)
-if ! command -v yay &>/dev/null; then
-  cd /tmp
-  git clone https://aur.archlinux.org/yay.git
-  cd yay
-  makepkg -si --noconfirm
-fi
+# - ms fonts
+sudo dnf -y install \
+  cabextract \
+  xorg-x11-font-utils \
+  fontconfig
 
-yay -S --noconfirm dbeaver-ce
+sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 # // ------------------------------
 
 # - nitch
-yay -S --noconfirm nitch
+wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
 # // ------------------------------
 
 # - rustup
-sudo pacman -S --noconfirm --needed rustup
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup default stable
 
 # - cargo packages
-sudo pacman -S --noconfirm --needed \
+sudo dnf -y install \
   cmake \
-  pkg-config \
-  freetype2 \
-  fontconfig \
-  libxcb \
-  libxkbcommon \
-  python
+  pkgconfig \
+  freetype-devel \
+  fontconfig-devel \
+  libxcb-devel \
+  libxkbcommon-devel \
+  python3
 
 cargo install \
   alacritty \
   bat \
-  zellij \
   zoxide
+
+sudo dnf copr enable varlad/zellij
+sudo dnf -y install zellij
 # // ------------------------------
 
 # - atuin
-yay -S --noconfirm atuin
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 # // ------------------------------
 
 # -- Alacritty config
@@ -108,7 +113,7 @@ cd ~
 sudo update-desktop-database
 
 # UTILITIES
-sudo pacman -S --noconfirm --needed \
+sudo dnf -y install \
   flameshot \
   solaar
 
@@ -127,7 +132,7 @@ cp -rv konsole ~/.local/share/
 chsh -s "$(which fish)"
 
 # NPM PACKAGES
-sudo pacman -S --noconfirm --needed npm
+sudo dnf -y install nodejs-npm
 sudo npm i -g n npm
 
 # - set nodejs to LTS
@@ -142,15 +147,24 @@ sudo npm i -g \
 mkdir -p ~/temp
 
 # - microsoft edge
-yay -S --noconfirm microsoft-edge-stable-bin
+wget "https://go.microsoft.com/fwlink?linkid=2149137" -O ~/temp/edge.rpm
+sudo dnf -y install ~/temp/edge.rpm
 # // ------------------------------
 
+# - dbeaver
+wget "https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm" -O ~/temp/dbeaver.rpm
+sudo dnf -y install ~/temp/dbeaver.rpm
+# // ------------------------------
+
+
 # - google chrome
-yay -S --noconfirm google-chrome
+wget "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -O ~/temp/chrome.rpm
+sudo dnf -y install ~/temp/chrome.rpm
 # // ------------------------------
 
 # - visual studio code insiders
-yay -S --noconfirm visual-studio-code-insiders-bin
+wget "https://code.visualstudio.com/sha/download?build=insider&os=linux-rpm-x64" -O ~/temp/vscode.rpm
+sudo dnf -y install ~/temp/vscode.rpm
 # // ------------------------------
 
 # - nerd fonts

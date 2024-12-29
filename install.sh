@@ -150,6 +150,9 @@ sudo npm i -g \
   svgo \
   vercel
 
+
+mkdir -p ~/temp
+
 # - microsoft edge
 wget "https://go.microsoft.com/fwlink?linkid=2149051" -O ~/temp/edge.deb
 sudo apt install -y ~/temp/edge.deb
@@ -167,7 +170,6 @@ sudo apt install -y ~/temp/vscode.deb
 
 # - nerd fonts
 current_dir=$(pwd)
-mkdir -p ~/temp
 wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
 unzip ~/temp/nerd-fonts.zip -d ~/temp
 cd ~/temp/nerd-fonts-master
