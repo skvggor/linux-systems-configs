@@ -156,7 +156,6 @@ wget "https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm" -O ~/temp/db
 sudo dnf -y install ~/temp/dbeaver.rpm
 # // ------------------------------
 
-
 # - google chrome
 wget "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -O ~/temp/chrome.rpm
 sudo dnf -y install ~/temp/chrome.rpm
