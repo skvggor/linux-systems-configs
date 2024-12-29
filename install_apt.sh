@@ -2,16 +2,19 @@
 
 set -euo pipefail
 
-mkdir -pv ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
-mkdir -pv ~/Google\ Drive
-mkdir -pv ~/Projects/{personal,work}
+mkdir -pv \
+  ~/Google\ Drive \
+  ~/Projects/{personal,work} \
+  ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
 
 sudo add-apt-repository ppa:obsproject/obs-studio -y
 sudo apt update -y && sudo apt upgrade -y
-sudo apt install -y curl git
 
-# UPDATE FONT CACHE
-sudo fc-cache -f -v
+# ESSENTIALS
+sudo apt install -y \
+  curl \
+  git \
+  unzip
 
 # DESIGN AND MULTIMEDIA
 sudo apt install -y \
@@ -21,7 +24,6 @@ sudo apt install -y \
   inkscape \
   krita \
   obs-studio \
-  simplescreenrecorder \
   ttf-mscorefonts-installer \
   vlc
 
@@ -46,23 +48,26 @@ sudo apt install -y \
   gnupg \
   lsb-release
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
+  sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+sudo apt update -y
 
-sudo apt update -y && sudo apt install -y \
+sudo apt install -y \
   docker-ce \
   docker-ce-cli \
-  containerd.io
-# // ------------------------------
+  containerd.io \
+  docker-buildx-plugin \
+  docker-compose-plugin
 
-# - configure and start
-sudo systemctl start docker.service
-sudo systemctl enable docker.service
-sudo chmod 666 /var/run/docker.sock
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
+# sudo systemctl start docker.service
+# sudo systemctl enable docker.service
+# sudo chmod 666 /var/run/docker.sock
+# sudo groupadd docker
+# sudo usermod -aG docker $USER
+# newgrp docker
+
 # // ------------------------------
 
 # - starship
@@ -84,7 +89,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup default stable
 
 # - cargo packages
-sudo apt install \
+sudo apt install -y \
   cmake \
   pkg-config \
   libfreetype6-dev \
@@ -96,7 +101,6 @@ sudo apt install \
 cargo install \
   alacritty \
   bat \
-  rioterm \
   zellij \
   zoxide
 # // ------------------------------
@@ -110,13 +114,6 @@ git clone https://github.com/alacritty/alacritty ~/temp/alacritty
 cd ~/temp/alacritty
 sudo cp -rv extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
 sudo desktop-file-install extra/linux/Alacritty.desktop
-# // ------------------------------
-
-# -- Rio config
-git clone https://github.com/raphamorim/rio ~/temp/rio
-cd ~/temp/rio
-sudo cp -rv misc/logo.svg /usr/share/pixmaps/Rio.svg
-sudo desktop-file-install misc/rio.desktop
 # // ------------------------------
 
 sudo update-desktop-database
@@ -136,7 +133,6 @@ cp -rv pulse.conf ~/.config/pulse/daemon.conf
 cp -rv alacritty ~/.config/
 cp -rv darktable ~/.config/
 cp -rv konsole ~/.local/share/
-cp -rv SimpleScreenRecorder/.ssr ~/
 
 # SET FISH AS DEFAULT SHELL
 chsh -s $(which fish)
@@ -148,19 +144,14 @@ sudo npm i -g n npm
 # - set nodejs to LTS
 sudo n lts
 
-sudo npm i -g begynner \
-  easy-rename \
+sudo npm i -g \
   gtop \
   localtunnel \
   svgo \
   vercel
 
-# - nerd fonts
-wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
-unzip ~/temp/nerd-fonts.zip -d ~/temp
-cd ~/temp/nerd-fonts
-bash install.sh
-# // ------------------------------
+
+mkdir -p ~/temp
 
 # - microsoft edge
 wget "https://go.microsoft.com/fwlink?linkid=2149051" -O ~/temp/edge.deb
@@ -176,6 +167,17 @@ sudo apt install -y ~/temp/chrome.deb
 wget "https://code.visualstudio.com/sha/download?build=insider&os=linux-deb-x64" -O ~/temp/vscode.deb
 sudo apt install -y ~/temp/vscode.deb
 # // ------------------------------
+
+# - nerd fonts
+current_dir=$(pwd)
+wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
+unzip ~/temp/nerd-fonts.zip -d ~/temp
+cd ~/temp/nerd-fonts-master
+bash install.sh
+cd "$current_dir"
+# // ------------------------------
+
+sudo fc-cache -f -v
 
 rm -rf ~/temp
 

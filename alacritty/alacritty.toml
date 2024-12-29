@@ -9,14 +9,14 @@ args = [
 ]
 
 [window]
-opacity = 1
+opacity = 0.8
 padding = { x = 20, y = 20 }
 dynamic_padding = true
 
 [font]
 normal = { family = "JetBrainsMono NF" }
 bold = { family = "JetBrainsMono NF", style = "Bold" }
-size = 14.0
+size = 16.0
 offset.y = 2
 
 [selection]
@@ -32,3 +32,6 @@ osc52 = "CopyPaste"
 
 [scrolling]
 history = 50000
+
+[general]
+import = ["~/.config/alacritty/plugins/alabaster_dark.toml"]
