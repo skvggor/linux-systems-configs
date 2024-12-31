@@ -30,17 +30,21 @@ These scripts help you quickly set up a development or multimedia environment wi
    - **Arch-based**: `install_pacman.sh`
    - **Fedora/Nobara**: `install_dnf.sh`
 4. **Run the script** in a terminal:
-   ```bash
-   bash install_apt.sh
-   ```
-   Or:
-   ```bash
-   bash install_pacman.sh
-   ```
-   Or:
-   ```bash
-   bash install_dnf.sh
-   ```
+   
+```bash
+bash install_apt.sh
+```
+Or:
+
+```bash
+bash install_pacman.sh
+```
+Or:
+
+```bash
+bash install_dnf.sh
+```
+
 5. **Follow any prompts** or confirmations during package installation.
 
 > **Note**: Depending on your system, you may need to run the script with `sudo` privileges or input your password when prompted.
