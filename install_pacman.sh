@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+initial_path=$(pwd)
+
 mkdir -pv \
   ~/Google\ Drive \
   ~/Projects/{personal,work} \
@@ -57,7 +59,6 @@ sudo pacman -S --noconfirm --needed starship
 # // ------------------------------
 
 # - dbeaver
-# (dbeaver is in the AUR, so we need yay; install yay if missing)
 if ! command -v yay &>/dev/null; then
   cd /tmp
   git clone https://aur.archlinux.org/yay.git
@@ -113,15 +114,15 @@ sudo pacman -S --noconfirm --needed \
   solaar
 
 # INSTALL CONFIGURATIONS
-cp -rv .gitconfig ~/.gitconfig
-cp -rv starship.toml ~/.config/
-cp -rv fish/config.fish ~/.config/fish/
-cp -rv fish/zoxide-conf.fish ~/.config/fish/
-cp -rv lsd/config.yaml ~/.config/lsd/
-cp -rv pulse.conf ~/.config/pulse/daemon.conf
-cp -rv alacritty ~/.config/
-cp -rv darktable ~/.config/
-cp -rv konsole ~/.local/share/
+cp -rv "${initial_path}/.gitconfig" ~/.gitconfig
+cp -rv "${initial_path}/starship.toml" ~/.config/
+cp -rv "${initial_path}/fish/config.fish" ~/.config/fish/
+cp -rv "${initial_path}/fish/zoxide-conf.fish" ~/.config/fish/
+cp -rv "${initial_path}/lsd/config.yaml" ~/.config/lsd/
+cp -rv "${initial_path}/pulse.conf" ~/.config/pulse/daemon.conf
+cp -rv "${initial_path}/alacritty" ~/.config/
+cp -rv "${initial_path}/darktable" ~/.config/
+cp -rv "${initial_path}/konsole" ~/.local/share/
 
 # SET FISH AS DEFAULT SHELL
 chsh -s "$(which fish)"
