@@ -1,7 +1,6 @@
 set PATH $HOME/.cargo/bin $PATH
 set PATH $HOME/.local/share/JetBrains/Toolbox/scripts $PATH
 
-
 set fish_greeting ""
 
 function camera
@@ -49,4 +48,10 @@ atuin init fish | source
 starship init fish | source
 zoxide init fish | source
 
-nitch; and cmatrix -s -b; and atuin sync
+if status is-interactive
+    if not set -q ZELLIJ
+        zellij
+    else
+        nitch; and cmatrix -s -b; and atuin sync
+    end
+end
