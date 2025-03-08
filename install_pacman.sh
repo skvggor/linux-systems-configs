@@ -16,7 +16,8 @@ sudo pacman -S --noconfirm --needed \
   base-devel \
   unzip \
   curl \
-  git
+  git \
+  xclip
 
 # DESIGN AND MULTIMEDIA
 sudo pacman -S --noconfirm --needed \

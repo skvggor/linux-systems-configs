@@ -15,7 +15,8 @@ sudo dnf -y update
 sudo dnf -y install \
   curl \
   git \
-  unzip
+  unzip \
+  xclip
 
 # DESIGN AND MULTIMEDIA
 sudo dnf -y install \
