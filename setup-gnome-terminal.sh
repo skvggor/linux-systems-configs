@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROFILE_NAME="Zellij"
+PROFILE_NAME="skvggor-with-zellij"
 PROFILE_SLUG=$(uuidgen)
 
 dconf write /org/gnome/terminal/legacy/profiles:/:$PROFILE_SLUG/visible-name "'$PROFILE_NAME'"
@@ -29,4 +29,4 @@ dconf write /org/gnome/terminal/legacy/profiles:/default "'$PROFILE_SLUG'"
 mkdir -p ~/.config/gtk-3.0/
 echo "VteTerminal, vte-terminal { padding: 20px; }" >>~/.config/gtk-3.0/gtk.css
 
-echo "✅ Profile '$PROFILE_NAME' successfully configured!"
+echo "✅ Profile '$PROFILE_NAME' to GNOME Terminal successfully configured!"
