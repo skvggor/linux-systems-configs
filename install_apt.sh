@@ -183,4 +183,6 @@ sudo fc-cache -f -v
 
 rm -rf ~/temp
 
+bash setup-gnome-terminal.sh
+
 exit 0
