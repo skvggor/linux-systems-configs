@@ -164,6 +164,14 @@ bash install.sh
 cd "$current_dir"
 # // ------------------------------
 
+# - font monaspace
+wget "https://github.com/githubnext/monaspace/archive/refs/heads/main.zip" -O ~/temp/monaspace.zip
+unzip ~/temp/monaspace.zip -d ~/temp
+cd ~/temp/monaspace-main
+bash util/install_linux.sh
+cd "$current_dir"
+# // ------------------------------
+
 sudo fc-cache -f -v
 
 rm -rf ~/temp

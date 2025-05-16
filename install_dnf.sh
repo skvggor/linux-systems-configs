@@ -79,17 +79,17 @@ rustup default stable
 
 # - cargo packages
 sudo dnf -y install \
+  bat \
   cmake \
-  pkgconfig \
-  freetype-devel \
   fontconfig-devel \
+  freetype-devel \
   libxcb-devel \
   libxkbcommon-devel \
+  pkgconfig \
   python3
 
 cargo install \
   alacritty \
-  bat \
   zoxide
 
 sudo dnf copr enable varlad/zellij
@@ -163,6 +163,13 @@ wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O 
 unzip ~/temp/nerd-fonts.zip -d ~/temp
 cd ~/temp/nerd-fonts-master
 bash install.sh
+cd "$current_dir"
+
+# - font monaspace
+wget "https://github.com/githubnext/monaspace/archive/refs/heads/main.zip" -O ~/temp/monaspace.zip
+unzip ~/temp/monaspace.zip -d ~/temp
+cd ~/temp/monaspace-main
+bash util/install_linux.sh
 cd "$current_dir"
 
 sudo fc-cache -f -v
