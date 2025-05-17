@@ -42,24 +42,21 @@ sudo pacman -S --noconfirm --needed \
   net-tools \
   nodejs
 
-# - docker
+# DOCKER
 sudo pacman -S --noconfirm --needed \
   docker
 
-sudo systemctl start docker.service
+# sudo systemctl start docker.service
 # sudo systemctl enable docker.service
 # sudo chmod 666 /var/run/docker.sock
 # sudo groupadd docker
 # sudo usermod -aG docker $USER
 # newgrp docker
 
-# // ------------------------------
-
-# - starship
+# STARSHIP
 sudo pacman -S --noconfirm --needed starship
-# // ------------------------------
 
-# - dbeaver
+# DBEAVER
 if ! command -v yay &>/dev/null; then
   cd /tmp
   git clone https://aur.archlinux.org/yay.git
@@ -68,17 +65,16 @@ if ! command -v yay &>/dev/null; then
 fi
 
 yay -S --noconfirm dbeaver-ce
-# // ------------------------------
 
-# - nitch
+# NITCH
 yay -S --noconfirm nitch
-# // ------------------------------
 
-# - rustup
-sudo pacman -S --noconfirm --needed rustup
+# RUSTUP
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+export PATH="$HOME/.cargo/bin:$PATH"
 rustup default stable
 
-# - cargo packages
+# CARGO PACKAGES
 sudo pacman -S --noconfirm --needed \
   cmake \
   pkg-config \
@@ -93,19 +89,16 @@ cargo install \
   bat \
   zellij \
   zoxide
-# // ------------------------------
 
-# - atuin
+# ATUIN
 yay -S --noconfirm atuin
-# // ------------------------------
 
-# -- Alacritty config
+# ALACRITTY
 git clone https://github.com/alacritty/alacritty ~/temp/alacritty
 cd ~/temp/alacritty
 sudo cp -rv extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
 sudo desktop-file-install extra/linux/Alacritty.desktop
 cd ~
-# // ------------------------------
 
 sudo update-desktop-database
 
@@ -132,7 +125,7 @@ chsh -s "$(which fish)"
 sudo pacman -S --noconfirm --needed npm
 sudo npm i -g n npm
 
-# - set nodejs to LTS
+# SET NODEJS TO LTS
 sudo n lts
 
 sudo npm i -g \
@@ -143,39 +136,32 @@ sudo npm i -g \
 
 mkdir -p ~/temp
 
-# - microsoft edge
+# MS EDGE
 yay -S --noconfirm microsoft-edge-stable-bin
-# // ------------------------------
 
-# - google chrome
+# GOOGLE CHROME
 yay -S --noconfirm google-chrome
-# // ------------------------------
 
-# - visual studio code insiders
+# VISUAL STUDIO CODE INSIDERS
 yay -S --noconfirm visual-studio-code-insiders-bin
-# // ------------------------------
 
-# - nerd fonts
+# NERD FONTS
 current_dir=$(pwd)
 wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
 unzip ~/temp/nerd-fonts.zip -d ~/temp
 cd ~/temp/nerd-fonts-master
 bash install.sh
 cd "$current_dir"
-# // ------------------------------
 
-# - font monaspace
+# MONOSPACE FONT
 wget "https://github.com/githubnext/monaspace/archive/refs/heads/main.zip" -O ~/temp/monaspace.zip
 unzip ~/temp/monaspace.zip -d ~/temp
 cd ~/temp/monaspace-main
 bash util/install_linux.sh
 cd "$current_dir"
-# // ------------------------------
 
 sudo fc-cache -f -v
 
 rm -rf ~/temp
-
-bash setup-gnome-terminal.sh
 
 exit 0
