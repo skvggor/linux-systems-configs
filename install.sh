@@ -164,7 +164,7 @@ docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release &&
   ;;
 dnf)
   install_packages dnf-plugins-core
-  $ADD_REPO_DNF_CMD https://download.docker.com/linux/fedora/docker-ce.repo
+  sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
   install_packages "${docker_pkgs_main[@]}"
   ;;
 pacman)
@@ -320,12 +320,21 @@ for src_cfg in "${!config_map[@]}"; do
   fi
 done
 
-[ -d "${CONFIG_SOURCE_DIR}/alacritty" ] &&
-  cp -rv "${CONFIG_SOURCE_DIR}/alacritty/"* "$HOME/.config/alacritty/"
-[ -d "${CONFIG_SOURCE_DIR}/darktable" ] &&
-  cp -rv "${CONFIG_SOURCE_DIR}/darktable/"* "$HOME/.config/darktable/"
-[ -d "${CONFIG_SOURCE_DIR}/konsole" ] &&
-  cp -rv "${CONFIG_SOURCE_DIR}/konsole/"* "$HOME/.local/share/konsole/"
+declare -A dir_map
+
+dir_map=(
+  ["${CONFIG_SOURCE_DIR}/alacritty"]="$HOME/.config/alacritty"
+  ["${CONFIG_SOURCE_DIR}/darktable"]="$HOME/.config/darktable"
+  ["${CONFIG_SOURCE_DIR}/konsole"]="$HOME/.local/share/konsole"
+)
+
+for src_dir in "${!dir_map[@]}"; do
+  dest_dir="${dir_map[$src_dir]}"
+  if [ -d "$src_dir" ]; then
+    mkdir -p "$dest_dir"
+    cp -rv "$src_dir/"* "$dest_dir/"
+  fi
+done
 
 # SET FISH AS DEFAULT SHELL
 if command -v fish &>/dev/null && [ "$SHELL" != "$(which fish)" ]; then
@@ -338,17 +347,21 @@ npm_pkg_dep="npm"
 [ "$PKG_MANAGER" == "dnf" ] && npm_pkg_dep="nodejs-npm"
 install_packages "$npm_pkg_dep"
 
-sudo npm i -g n
-
 export N_PREFIX="$HOME/.n"
 export PATH="$N_PREFIX/bin:$PATH"
 
-sudo mkdir -p "$N_PREFIX"
+mkdir -p "$N_PREFIX"
+chown -R "$(whoami)" "$N_PREFIX"
 
-sudo chown -R "$(whoami)" "$N_PREFIX"
+if ! command -v n &>/dev/null; then
+  npm install -g n
+fi
 
-if [ -f "$HOME/.profile" ] &&
-  ! grep -q '\$N_PREFIX/bin' "$HOME/.profile"; then
+n lts
+
+hash -r
+
+if [ -f "$HOME/.profile" ] && ! grep -q '\$N_PREFIX/bin' "$HOME/.profile"; then
   echo -e 'export N_PREFIX="$HOME/.n"\nexport PATH="$N_PREFIX/bin:$PATH"' \
     >>"$HOME/.profile"
 fi
@@ -359,15 +372,9 @@ if command -v fish &>/dev/null && [ -d "$HOME/.config/fish" ] &&
     >>"$HOME/.config/fish/config.fish"
 fi
 
-sudo "$N_PREFIX/bin/n" lts || n lts
-
 npm_global_pkgs=(npm@latest gtop localtunnel svgo vercel)
 
-if [ -x "$N_PREFIX/bin/npm" ]; then
-  sudo "$N_PREFIX/bin/npm" i -g "${npm_global_pkgs[@]}"
-else
-  sudo npm i -g "${npm_global_pkgs[@]}"
-fi
+npm i -g "${npm_global_pkgs[@]}"
 
 # MS EDGE
 case $PKG_MANAGER in
