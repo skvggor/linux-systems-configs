@@ -9,32 +9,34 @@ mkdir -pv \
   ~/Projects/{personal,work} \
   ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
 
-sudo pacman -Syu --noconfirm
+sudo add-apt-repository ppa:obsproject/obs-studio -y
+sudo apt update -y && sudo apt upgrade -y
 
 # ESSENTIALS
-sudo pacman -S --noconfirm --needed \
-  base-devel \
-  unzip \
+sudo apt install -y \
   curl \
   git \
+  unzip \
   xclip
 
 # DESIGN AND MULTIMEDIA
-sudo pacman -S --noconfirm --needed \
+sudo apt install -y \
   cheese \
   darktable \
   gimp \
   inkscape \
   krita \
   obs-studio \
+  ttf-mscorefonts-installer \
   vlc
 
 # SYSTEM AND DEVELOPMENT
-sudo pacman -S --noconfirm --needed \
+sudo apt install -y \
+  build-essential \
   cmake \
   cmatrix \
   fish \
-  go \
+  golang-go \
   jq \
   konsole \
   lsd \
@@ -42,75 +44,78 @@ sudo pacman -S --noconfirm --needed \
   net-tools \
   nodejs
 
-# - docker
-sudo pacman -S --noconfirm --needed \
-  docker
+# DOCKER
+sudo apt install -y \
+  apt-transport-https \
+  ca-certificates \
+  gnupg \
+  lsb-release
 
-sudo systemctl start docker.service
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
+  sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+sudo apt update -y
+
+sudo apt install -y \
+  docker-ce \
+  docker-ce-cli \
+  containerd.io \
+  docker-buildx-plugin \
+  docker-compose-plugin
+
+# sudo systemctl start docker.service
 # sudo systemctl enable docker.service
 # sudo chmod 666 /var/run/docker.sock
 # sudo groupadd docker
 # sudo usermod -aG docker $USER
 # newgrp docker
 
-# // ------------------------------
+# STARSHIP
+curl -sS https://starship.rs/install.sh | sh
 
-# - starship
-sudo pacman -S --noconfirm --needed starship
-# // ------------------------------
+# DBEAVER
+sudo wget -O /usr/share/keyrings/dbeaver.gpg.key https://dbeaver.io/debs/dbeaver.gpg.key
+echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg.key] https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list.d/dbeaver.list
+sudo apt update -y && sudo apt install dbeaver-ce -y
 
-# - dbeaver
-if ! command -v yay &>/dev/null; then
-  cd /tmp
-  git clone https://aur.archlinux.org/yay.git
-  cd yay
-  makepkg -si --noconfirm
-fi
+# NITCH
+wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
 
-yay -S --noconfirm dbeaver-ce
-# // ------------------------------
-
-# - nitch
-yay -S --noconfirm nitch
-# // ------------------------------
-
-# - rustup
-sudo pacman -S --noconfirm --needed rustup
+# RUSTUP
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+export PATH="$HOME/.cargo/bin:$PATH"
 rustup default stable
 
-# - cargo packages
-sudo pacman -S --noconfirm --needed \
+# CARGO PACKAGES
+sudo apt install -y \
   cmake \
   pkg-config \
-  freetype2 \
-  fontconfig \
-  libxcb \
-  libxkbcommon \
-  python
+  libfreetype6-dev \
+  libfontconfig1-dev \
+  libxcb-xfixes0-dev \
+  libxkbcommon-dev \
+  python3
 
 cargo install \
   alacritty \
   bat \
   zellij \
   zoxide
-# // ------------------------------
 
-# - atuin
-yay -S --noconfirm atuin
-# // ------------------------------
+# ATUIN
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
-# -- Alacritty config
+# ALACRITTY
 git clone https://github.com/alacritty/alacritty ~/temp/alacritty
 cd ~/temp/alacritty
 sudo cp -rv extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
 sudo desktop-file-install extra/linux/Alacritty.desktop
-cd ~
-# // ------------------------------
 
 sudo update-desktop-database
 
 # UTILITIES
-sudo pacman -S --noconfirm --needed \
+sudo apt install -y \
   flameshot \
   solaar
 
@@ -129,10 +134,10 @@ cp -rv "${initial_path}/konsole" ~/.local/share/
 chsh -s "$(which fish)"
 
 # NPM PACKAGES
-sudo pacman -S --noconfirm --needed npm
+sudo apt install -y npm
 sudo npm i -g n npm
 
-# - set nodejs to LTS
+# SET NODEJS TO LTS
 sudo n lts
 
 sudo npm i -g \
@@ -143,39 +148,35 @@ sudo npm i -g \
 
 mkdir -p ~/temp
 
-# - microsoft edge
-yay -S --noconfirm microsoft-edge-stable-bin
-# // ------------------------------
+# MS EDGE
+wget "https://go.microsoft.com/fwlink?linkid=2149051" -O ~/temp/edge.deb
+sudo apt install -y ~/temp/edge.deb
 
-# - google chrome
-yay -S --noconfirm google-chrome
-# // ------------------------------
+# GOOGLE CHROME
+wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" -O ~/temp/chrome.deb
+sudo apt install -y ~/temp/chrome.deb
 
-# - visual studio code insiders
-yay -S --noconfirm visual-studio-code-insiders-bin
-# // ------------------------------
+# VISUAL STUDIO CODE INSIDERS
+wget "https://code.visualstudio.com/sha/download?build=insider&os=linux-deb-x64" -O ~/temp/vscode.deb
+sudo apt install -y ~/temp/vscode.deb
 
-# - nerd fonts
+# NERD FONTS
 current_dir=$(pwd)
 wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
 unzip ~/temp/nerd-fonts.zip -d ~/temp
 cd ~/temp/nerd-fonts-master
 bash install.sh
 cd "$current_dir"
-# // ------------------------------
 
-# - font monaspace
+# MONOSPACE FONT
 wget "https://github.com/githubnext/monaspace/archive/refs/heads/main.zip" -O ~/temp/monaspace.zip
 unzip ~/temp/monaspace.zip -d ~/temp
 cd ~/temp/monaspace-main
 bash util/install_linux.sh
 cd "$current_dir"
-# // ------------------------------
 
 sudo fc-cache -f -v
 
 rm -rf ~/temp
-
-bash setup-gnome-terminal.sh
 
 exit 0

@@ -9,17 +9,18 @@ mkdir -pv \
   ~/Projects/{personal,work} \
   ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
 
-sudo dnf -y update
+sudo pacman -Syu --noconfirm
 
 # ESSENTIALS
-sudo dnf -y install \
+sudo pacman -S --noconfirm --needed \
+  base-devel \
+  unzip \
   curl \
   git \
-  unzip \
   xclip
 
 # DESIGN AND MULTIMEDIA
-sudo dnf -y install \
+sudo pacman -S --noconfirm --needed \
   cheese \
   darktable \
   gimp \
@@ -29,11 +30,11 @@ sudo dnf -y install \
   vlc
 
 # SYSTEM AND DEVELOPMENT
-sudo dnf -y install \
+sudo pacman -S --noconfirm --needed \
   cmake \
   cmatrix \
   fish \
-  golang \
+  go \
   jq \
   konsole \
   lsd \
@@ -41,16 +42,9 @@ sudo dnf -y install \
   net-tools \
   nodejs
 
-# - docker
-sudo dnf -y install dnf-plugins-core
-sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
-
-sudo dnf -y install \
-  docker-ce \
-  docker-ce-cli \
-  containerd.io \
-  docker-buildx-plugin \
-  docker-compose-plugin
+# DOCKER
+sudo pacman -S --noconfirm --needed \
+  docker
 
 # sudo systemctl start docker.service
 # sudo systemctl enable docker.service
@@ -59,46 +53,47 @@ sudo dnf -y install \
 # sudo usermod -aG docker $USER
 # newgrp docker
 
-# - starship
-curl -sS https://starship.rs/install.sh | sh
+# STARSHIP
+sudo pacman -S --noconfirm --needed starship
 
-# - ms fonts
-sudo dnf -y install \
-  cabextract \
-  xorg-x11-font-utils \
-  fontconfig
+# DBEAVER
+if ! command -v yay &>/dev/null; then
+  cd /tmp
+  git clone https://aur.archlinux.org/yay.git
+  cd yay
+  makepkg -si --noconfirm
+fi
 
-sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+yay -S --noconfirm dbeaver-ce
 
-# - nitch
-wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
+# NITCH
+yay -S --noconfirm nitch
 
-# - rustup
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# RUSTUP
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+export PATH="$HOME/.cargo/bin:$PATH"
 rustup default stable
 
-# - cargo packages
-sudo dnf -y install \
-  bat \
+# CARGO PACKAGES
+sudo pacman -S --noconfirm --needed \
   cmake \
-  fontconfig-devel \
-  freetype-devel \
-  libxcb-devel \
-  libxkbcommon-devel \
-  pkgconfig \
-  python3
+  pkg-config \
+  freetype2 \
+  fontconfig \
+  libxcb \
+  libxkbcommon \
+  python
 
 cargo install \
   alacritty \
+  bat \
+  zellij \
   zoxide
 
-sudo dnf copr enable varlad/zellij
-sudo dnf -y install zellij
+# ATUIN
+yay -S --noconfirm atuin
 
-# - atuin
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-
-# -- Alacritty config
+# ALACRITTY
 git clone https://github.com/alacritty/alacritty ~/temp/alacritty
 cd ~/temp/alacritty
 sudo cp -rv extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
@@ -108,7 +103,7 @@ cd ~
 sudo update-desktop-database
 
 # UTILITIES
-sudo dnf -y install \
+sudo pacman -S --noconfirm --needed \
   flameshot \
   solaar
 
@@ -127,10 +122,10 @@ cp -rv "${initial_path}/konsole" ~/.local/share/
 chsh -s "$(which fish)"
 
 # NPM PACKAGES
-sudo dnf -y install nodejs-npm
+sudo pacman -S --noconfirm --needed npm
 sudo npm i -g n npm
 
-# - set nodejs to LTS
+# SET NODEJS TO LTS
 sudo n lts
 
 sudo npm i -g \
@@ -141,23 +136,16 @@ sudo npm i -g \
 
 mkdir -p ~/temp
 
-# - microsoft edge
-wget "https://go.microsoft.com/fwlink?linkid=2149137" -O ~/temp/edge.rpm
-sudo dnf -y install ~/temp/edge.rpm
+# MS EDGE
+yay -S --noconfirm microsoft-edge-stable-bin
 
-# - dbeaver
-wget "https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm" -O ~/temp/dbeaver.rpm
-sudo dnf -y install ~/temp/dbeaver.rpm
+# GOOGLE CHROME
+yay -S --noconfirm google-chrome
 
-# - google chrome
-wget "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -O ~/temp/chrome.rpm
-sudo dnf -y install ~/temp/chrome.rpm
+# VISUAL STUDIO CODE INSIDERS
+yay -S --noconfirm visual-studio-code-insiders-bin
 
-# - visual studio code insiders
-wget "https://code.visualstudio.com/sha/download?build=insider&os=linux-rpm-x64" -O ~/temp/vscode.rpm
-sudo dnf -y install ~/temp/vscode.rpm
-
-# - nerd fonts
+# NERD FONTS
 current_dir=$(pwd)
 wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
 unzip ~/temp/nerd-fonts.zip -d ~/temp
@@ -165,7 +153,7 @@ cd ~/temp/nerd-fonts-master
 bash install.sh
 cd "$current_dir"
 
-# - font monaspace
+# MONOSPACE FONT
 wget "https://github.com/githubnext/monaspace/archive/refs/heads/main.zip" -O ~/temp/monaspace.zip
 unzip ~/temp/monaspace.zip -d ~/temp
 cd ~/temp/monaspace-main
@@ -175,7 +163,5 @@ cd "$current_dir"
 sudo fc-cache -f -v
 
 rm -rf ~/temp
-
-bash setup-gnome-terminal.sh
 
 exit 0

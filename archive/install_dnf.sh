@@ -9,34 +9,31 @@ mkdir -pv \
   ~/Projects/{personal,work} \
   ~/.config/{pulse,lsd,fish,darktable,zellij,alacritty,starship,konsole}
 
-sudo add-apt-repository ppa:obsproject/obs-studio -y
-sudo apt update -y && sudo apt upgrade -y
+sudo dnf -y update
 
 # ESSENTIALS
-sudo apt install -y \
+sudo dnf -y install \
   curl \
   git \
   unzip \
   xclip
 
 # DESIGN AND MULTIMEDIA
-sudo apt install -y \
+sudo dnf -y install \
   cheese \
   darktable \
   gimp \
   inkscape \
   krita \
   obs-studio \
-  ttf-mscorefonts-installer \
   vlc
 
 # SYSTEM AND DEVELOPMENT
-sudo apt install -y \
-  build-essential \
+sudo dnf -y install \
   cmake \
   cmatrix \
   fish \
-  golang-go \
+  golang \
   jq \
   konsole \
   lsd \
@@ -45,19 +42,10 @@ sudo apt install -y \
   nodejs
 
 # - docker
-sudo apt install -y \
-  apt-transport-https \
-  ca-certificates \
-  gnupg \
-  lsb-release
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
 
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
-  sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-sudo apt update -y
-
-sudo apt install -y \
+sudo dnf -y install \
   docker-ce \
   docker-ce-cli \
   containerd.io \
@@ -71,58 +59,57 @@ sudo apt install -y \
 # sudo usermod -aG docker $USER
 # newgrp docker
 
-# // ------------------------------
-
-# - starship
+# STARSHIP
 curl -sS https://starship.rs/install.sh | sh
-# // ------------------------------
 
-# - dbeaver
-sudo wget -O /usr/share/keyrings/dbeaver.gpg.key https://dbeaver.io/debs/dbeaver.gpg.key
-echo "deb [signed-by=/usr/share/keyrings/dbeaver.gpg.key] https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list.d/dbeaver.list
-sudo apt update -y && sudo apt install dbeaver-ce -y
-# // ------------------------------
+# MS CORE FONTS
+sudo dnf -y install \
+  cabextract \
+  xorg-x11-font-utils \
+  fontconfig
 
-# - nitch
+sudo rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+
+# NITCH
 wget https://raw.githubusercontent.com/unxsh/nitch/main/setup.sh && sh setup.sh
-# // ------------------------------
 
-# - rustup
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# RUSTUP
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+export PATH="$HOME/.cargo/bin:$PATH"
 rustup default stable
 
-# - cargo packages
-sudo apt install -y \
+# CARGO PACKAGES
+sudo dnf -y install \
+  bat \
   cmake \
-  pkg-config \
-  libfreetype6-dev \
-  libfontconfig1-dev \
-  libxcb-xfixes0-dev \
-  libxkbcommon-dev \
+  fontconfig-devel \
+  freetype-devel \
+  libxcb-devel \
+  libxkbcommon-devel \
+  pkgconfig \
   python3
 
 cargo install \
   alacritty \
-  bat \
-  zellij \
   zoxide
-# // ------------------------------
 
-# - atuin
+sudo dnf copr enable varlad/zellij
+sudo dnf -y install zellij
+
+# ATUIN
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-# // ------------------------------
 
-# -- Alacritty config
+# ALACRITTY
 git clone https://github.com/alacritty/alacritty ~/temp/alacritty
 cd ~/temp/alacritty
 sudo cp -rv extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
 sudo desktop-file-install extra/linux/Alacritty.desktop
-# // ------------------------------
+cd ~
 
 sudo update-desktop-database
 
 # UTILITIES
-sudo apt install -y \
+sudo dnf -y install \
   flameshot \
   solaar
 
@@ -141,10 +128,10 @@ cp -rv "${initial_path}/konsole" ~/.local/share/
 chsh -s "$(which fish)"
 
 # NPM PACKAGES
-sudo apt install -y npm
+sudo dnf -y install nodejs-npm
 sudo npm i -g n npm
 
-# - set nodejs to LTS
+# SET NODEJS TO LTS
 sudo n lts
 
 sudo npm i -g \
@@ -155,42 +142,39 @@ sudo npm i -g \
 
 mkdir -p ~/temp
 
-# - microsoft edge
-wget "https://go.microsoft.com/fwlink?linkid=2149051" -O ~/temp/edge.deb
-sudo apt install -y ~/temp/edge.deb
-# // ------------------------------
+# MS EDGE
+wget "https://go.microsoft.com/fwlink?linkid=2149137" -O ~/temp/edge.rpm
+sudo dnf -y install ~/temp/edge.rpm
 
-# - google chrome
-wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" -O ~/temp/chrome.deb
-sudo apt install -y ~/temp/chrome.deb
-# // ------------------------------
+# DBEAVER
+wget "https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm" -O ~/temp/dbeaver.rpm
+sudo dnf -y install ~/temp/dbeaver.rpm
 
-# - visual studio code insiders
-wget "https://code.visualstudio.com/sha/download?build=insider&os=linux-deb-x64" -O ~/temp/vscode.deb
-sudo apt install -y ~/temp/vscode.deb
-# // ------------------------------
+# GOOGLE CHROME
+wget "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -O ~/temp/chrome.rpm
+sudo dnf -y install ~/temp/chrome.rpm
 
-# - nerd fonts
+# VISUAL STUDIO CODE INSIDERS
+wget "https://code.visualstudio.com/sha/download?build=insider&os=linux-rpm-x64" -O ~/temp/vscode.rpm
+sudo dnf -y install ~/temp/vscode.rpm
+
+# NERD FONTS
 current_dir=$(pwd)
 wget "https://github.com/ryanoasis/nerd-fonts/archive/refs/heads/master.zip" -O ~/temp/nerd-fonts.zip
 unzip ~/temp/nerd-fonts.zip -d ~/temp
 cd ~/temp/nerd-fonts-master
 bash install.sh
 cd "$current_dir"
-# // ------------------------------
 
-# - font monaspace
+# MONOSPACE FONT
 wget "https://github.com/githubnext/monaspace/archive/refs/heads/main.zip" -O ~/temp/monaspace.zip
 unzip ~/temp/monaspace.zip -d ~/temp
 cd ~/temp/monaspace-main
 bash util/install_linux.sh
 cd "$current_dir"
-# // ------------------------------
 
 sudo fc-cache -f -v
 
 rm -rf ~/temp
-
-bash setup-gnome-terminal.sh
 
 exit 0
