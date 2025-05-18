@@ -349,6 +349,9 @@ install_packages "$npm_pkg_dep"
 
 export N_PREFIX="$HOME/.n"
 export PATH="$N_PREFIX/bin:$PATH"
+export NPM_CONFIG_PREFIX="$N_PREFIX"
+
+npm config set prefix "$N_PREFIX"
 
 mkdir -p "$N_PREFIX"
 chown -R "$(whoami)" "$N_PREFIX"
@@ -361,20 +364,39 @@ n lts
 
 hash -r
 
-if [ -f "$HOME/.profile" ] && ! grep -q '\$N_PREFIX/bin' "$HOME/.profile"; then
-  echo -e 'export N_PREFIX="$HOME/.n"\nexport PATH="$N_PREFIX/bin:$PATH"' \
+if [ "$PKG_MANAGER" == "apt" ]; then
+  sudo apt remove -y nodejs npm || true
+elif [ "$PKG_MANAGER" == "dnf" ]; then
+  sudo dnf remove -y nodejs npm || true
+elif [ "$PKG_MANAGER" == "pacman" ]; then
+  sudo pacman -Rs --noconfirm nodejs npm || true
+fi
+
+if [ -f "$HOME/.profile" ] &&
+  ! grep -q '\$N_PREFIX/bin' "$HOME/.profile"; then
+  echo -e 'export N_PREFIX="$HOME/.n"\n\
+export PATH="$N_PREFIX/bin:$PATH"' \
     >>"$HOME/.profile"
 fi
 
-if command -v fish &>/dev/null && [ -d "$HOME/.config/fish" ] &&
-  ! grep -q '\$N_PREFIX/bin' "$HOME/.config/fish/config.fish"; then
-  echo -e 'set -gx N_PREFIX "$HOME/.n"\nset -gx PATH "$N_PREFIX/bin" $PATH' \
+if command -v fish &>/dev/null &&
+  [ -d "$HOME/.config/fish" ] &&
+  ! grep -q '\$N_PREFIX/bin' \
+    "$HOME/.config/fish/config.fish"; then
+  echo -e 'set -gx N_PREFIX "$HOME/.n"\n\
+set -gx PATH "$N_PREFIX/bin" $PATH' \
     >>"$HOME/.config/fish/config.fish"
 fi
 
-npm_global_pkgs=(npm@latest gtop localtunnel svgo vercel)
+npm_global_pkgs=(
+  npm@latest
+  gtop
+  localtunnel
+  svgo
+  vercel
+)
 
-npm i -g "${npm_global_pkgs[@]}"
+npm install -g "${npm_global_pkgs[@]}"
 
 # MS EDGE
 case $PKG_MANAGER in
