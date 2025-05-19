@@ -235,19 +235,25 @@ rustup default stable
 # CARGO PACKAGES
 pkgs_build_cargo_common=(cmake pkg-config)
 pkgs_build_cargo_python="python3"
-pkgs_build_cargo_apt=(libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev
-  libxkbcommon-dev)
-pkgs_build_cargo_dnf=(fontconfig-devel freetype-devel libxcb-devel
-  libxkbcommon-devel)
+pkgs_build_cargo_apt=(
+  libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev
+)
+pkgs_build_cargo_dnf=(
+  fontconfig-devel freetype-devel libxcb-devel libxkbcommon-devel
+)
 pkgs_build_cargo_pacman=(freetype2 fontconfig libxcb libxkbcommon python)
 
 case $PKG_MANAGER in
 apt)
-  install_packages "${pkgs_build_cargo_common[@]}" "$pkgs_build_cargo_python" \
+  install_packages \
+    "${pkgs_build_cargo_common[@]}" \
+    "$pkgs_build_cargo_python" \
     "${pkgs_build_cargo_apt[@]}"
   ;;
 dnf)
-  install_packages "${pkgs_build_cargo_common[@]}" "$pkgs_build_cargo_python" \
+  install_packages \
+    "${pkgs_build_cargo_common[@]}" \
+    "$pkgs_build_cargo_python" \
     "${pkgs_build_cargo_dnf[@]}"
   ;;
 pacman)
@@ -256,16 +262,23 @@ pacman)
   ;;
 esac
 
-cargo_pkgs_to_install=(alacritty zoxide)
+cargo_pkgs=(alacritty zoxide)
 
-if [ "$PKG_MANAGER" != "dnf" ]; then
-  cargo_pkgs_to_install+=(bat zellij)
-else
+case $PKG_MANAGER in
+pacman)
+  install_packages bat zellij
+  ;;
+dnf)
   install_packages bat
   sudo dnf copr enable varlad/zellij -y
   install_packages zellij
-fi
-cargo install "${cargo_pkgs_to_install[@]}"
+  ;;
+*)
+  cargo_pkgs+=(bat zellij)
+  ;;
+esac
+
+cargo install "${cargo_pkgs[@]}"
 
 # ATUIN
 if [ "$PKG_MANAGER" == "pacman" ]; then
