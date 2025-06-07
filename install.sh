@@ -131,7 +131,7 @@ golang_pkg="golang"
 
 case $PKG_MANAGER in
 apt)
-  curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh
+  curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh | bash
   golang_pkg="golang-go"
   install_packages build-essential "$golang_pkg" "$nodejs_pkg" \
     "${common_dev_base[@]}"
