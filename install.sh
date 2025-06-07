@@ -25,7 +25,6 @@ detect_package_manager() {
     UPDATE_CMD="$SUDO_CMD dnf check-update || true"
     UPGRADE_CMD="$SUDO_CMD dnf upgrade -y"
     INSTALL_CMD="$SUDO_CMD dnf install -y"
-    ADD_REPO_DNF_CMD="$SUDO_CMD dnf config-manager --add-repo"
   elif command -v pacman &>/dev/null; then
     PKG_MANAGER="pacman"
     SUDO_CMD="sudo"
@@ -132,16 +131,20 @@ golang_pkg="golang"
 
 case $PKG_MANAGER in
 apt)
+  curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh
   golang_pkg="golang-go"
   install_packages build-essential "$golang_pkg" "$nodejs_pkg" \
     "${common_dev_base[@]}"
   ;;
 dnf)
-  install_packages "$golang_pkg" "$nodejs_pkg" "${common_dev_base[@]}"
+  dnf copr enable pgdev/ghostty
+  ghostty_pkg="ghostty"
+  install_packages "$ghostty_pkg" "$golang_pkg" "$nodejs_pkg" "${common_dev_base[@]}"
   ;;
 pacman)
+  ghostty_pkg="ghostty"
   golang_pkg="go"
-  install_packages "$golang_pkg" "$nodejs_pkg" "${common_dev_base[@]}"
+  install_packages "$ghostty_pkg" "$golang_pkg" "$nodejs_pkg" "${common_dev_base[@]}"
   ;;
 esac
 
@@ -318,6 +321,7 @@ config_map=(
   ["${CONFIG_SOURCE_DIR}/pulse.conf"]="$HOME/.config/pulse/daemon.conf"
   ["${CONFIG_SOURCE_DIR}/alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml"
   ["${CONFIG_SOURCE_DIR}/darktable/darktablerc"]="$HOME/.config/darktable/darktablerc"
+  ["${CONFIG_SOURCE_DIR}/ghostty/config"]="$HOME/.config/ghostty/config"
 )
 
 for src_cfg in "${!config_map[@]}"; do

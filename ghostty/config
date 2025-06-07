@@ -1,0 +1,9 @@
+font-family = "Iosevka Nerd Font"
+font-size = 14
+
+background-opacity = 0.8
+
+theme = UltraDark
+
+cursor-style = bar
+cursor-color = #FE019A
