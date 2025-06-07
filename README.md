@@ -40,6 +40,7 @@ bash install.sh
 - docker-compose
 - fish
 - flameshot
+- ghostty
 - gimp
 - git
 - google-chrome-stable
