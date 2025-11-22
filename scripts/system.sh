@@ -39,8 +39,13 @@ install_system_tools() {
       install_packages build-essential "${common_dev_base[@]}"
       ;;
     dnf)
-      dnf copr enable pgdev/ghostty
-      install_packages ghostty "${common_dev_base[@]}"
+      $SUDO_CMD dnf copr enable -y scottames/ghostty
+
+      if ! install_packages ghostty; then
+        log_warn "Failed to install Ghostty. It might not be available for this Fedora version yet."
+      fi
+
+      install_packages "${common_dev_base[@]}"
       ;;
     pacman)
       install_packages ghostty "${common_dev_base[@]}"
