@@ -32,6 +32,9 @@ install_node() {
   export NVM_DIR="$HOME/.nvm"
   mkdir -p "$NVM_DIR"
 
+  # Temporarily disable nounset as nvm doesn't support it
+  set +u
+
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -46,6 +49,9 @@ install_node() {
   else
     log_error "NVM failed to load. Please check installation."
   fi
+
+  # Re-enable nounset
+  set -u
 }
 
 run_language_setup() {
