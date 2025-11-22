@@ -51,6 +51,7 @@ install_docker() {
 
 install_dbeaver() {
   log_info "Installing DBeaver..."
+
   case $PKG_MANAGER in
     apt)
       wget -O /tmp/dbeaver.gpg.key https://dbeaver.io/debs/dbeaver.gpg.key
@@ -113,6 +114,7 @@ install_browsers() {
 
 install_vscode() {
   log_info "Installing VS Code Insiders..."
+
   case $PKG_MANAGER in
     apt)
       local vscode_deb="/tmp/vscode.deb"

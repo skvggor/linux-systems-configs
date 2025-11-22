@@ -2,16 +2,17 @@
 
 install_nerd_fonts() {
   log_info "Installing Nerd Fonts (Optimized)..."
+
   local fonts_dir="$HOME/.local/share/fonts"
   mkdir -p "$fonts_dir"
 
-  # List of fonts to install. Add more here if needed.
   local fonts=(
     "JetBrainsMono"
     "FiraCode"
     "Hack"
     "Meslo"
     "GeistMono"
+    "Iosevka"
   )
 
   local version="v3.2.1"

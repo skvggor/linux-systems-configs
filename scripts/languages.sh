@@ -2,6 +2,7 @@
 
 install_go() {
   log_info "Installing Go..."
+
   local golang_pkg="golang"
 
   case $PKG_MANAGER in
@@ -32,7 +33,6 @@ install_node() {
   export NVM_DIR="$HOME/.nvm"
   mkdir -p "$NVM_DIR"
 
-  # Temporarily disable nounset as nvm doesn't support it
   set +u
 
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
@@ -50,7 +50,6 @@ install_node() {
     log_error "NVM failed to load. Please check installation."
   fi
 
-  # Re-enable nounset
   set -u
 }
 

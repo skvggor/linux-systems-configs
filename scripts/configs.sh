@@ -37,6 +37,7 @@ run_configs_setup() {
   done
 
   declare -A dir_map
+
   dir_map=(
     ["${config_source_dir}/alacritty"]="$HOME/.config/alacritty"
     ["${config_source_dir}/darktable"]="$HOME/.config/darktable"
@@ -45,6 +46,7 @@ run_configs_setup() {
 
   for src_dir in "${!dir_map[@]}"; do
     dest_dir="${dir_map[$src_dir]}"
+
     if [ -d "$src_dir" ]; then
       log_info "Copying directory $src_dir to $dest_dir"
       mkdir -p "$dest_dir"

@@ -2,6 +2,7 @@
 
 install_starship() {
   log_info "Installing Starship..."
+
   if [ "$PKG_MANAGER" == "pacman" ]; then
     install_packages starship
   else
@@ -11,6 +12,7 @@ install_starship() {
 
 install_nitch() {
   log_info "Installing Nitch..."
+
   if [ "$PKG_MANAGER" == "pacman" ]; then
     install_aur_packages nitch
   else
@@ -23,6 +25,7 @@ install_nitch() {
 
 install_atuin() {
   log_info "Installing Atuin..."
+
   if [ "$PKG_MANAGER" == "pacman" ]; then
     install_aur_packages atuin
   else
@@ -75,6 +78,7 @@ install_cargo_tools() {
 
 setup_alacritty_extras() {
   log_info "Setting up Alacritty extras (icon/desktop)..."
+
   local temp_dir="/tmp/alacritty_extras"
 
   if [ ! -d "$temp_dir" ]; then

@@ -2,6 +2,7 @@
 
 setup_directories() {
   log_info "Creating directories..."
+
   mkdir -pv \
     "$HOME/Google Drive" \
     "$HOME/Projects/personal" \
@@ -18,6 +19,7 @@ setup_directories() {
 
 install_essentials() {
   log_info "Installing essential packages..."
+
   local common_essentials=(curl git unzip xclip wget)
 
   case $PKG_MANAGER in
@@ -28,6 +30,7 @@ install_essentials() {
 
 install_system_tools() {
   log_info "Installing system and development tools..."
+
   local common_dev_base=(cmake cmatrix fish jq konsole lsd micro net-tools)
 
   case $PKG_MANAGER in
@@ -47,6 +50,7 @@ install_system_tools() {
 
 setup_shell() {
   log_info "Setting up Fish shell..."
+
   if command -v fish &>/dev/null; then
     if [ "$SHELL" != "$(which fish)" ]; then
       chsh -s "$(which fish)"
