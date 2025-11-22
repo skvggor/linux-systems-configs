@@ -1,6 +1,16 @@
 set PATH $HOME/.cargo/bin $PATH
 set PATH $HOME/.local/share/JetBrains/Toolbox/scripts $PATH
 
+set -gx NVM_DIR "$HOME/.nvm"
+
+if test -d "$NVM_DIR/versions/node"
+    set -l node_versions (ls $NVM_DIR/versions/node)
+    if count $node_versions >0
+        set -l latest_node $node_versions[-1]
+        set -gx PATH "$NVM_DIR/versions/node/$latest_node/bin" $PATH
+    end
+end
+
 set fish_greeting ""
 
 function camera
