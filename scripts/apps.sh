@@ -65,7 +65,7 @@ install_dbeaver() {
       install_packages "$rpm_url"
       ;;
     pacman)
-      install_aur_packages dbeaver-ce
+      install_aur_packages dbeaver-ce-bin
       ;;
   esac
 }
