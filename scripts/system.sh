@@ -18,7 +18,7 @@ setup_directories() {
 
 install_essentials() {
   log_info "Installing essential packages..."
-  local common_essentials=(curl git unzip xclip)
+  local common_essentials=(curl git unzip xclip wget)
 
   case $PKG_MANAGER in
     apt | dnf) install_packages "${common_essentials[@]}" ;;
