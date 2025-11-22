@@ -35,11 +35,11 @@ done
 log_info "Starting installation..."
 
 run_system_setup
+run_configs_setup "$SCRIPT_DIR"
 run_language_setup
 run_cli_tools_setup
 run_apps_setup
 run_fonts_setup
-run_configs_setup "$SCRIPT_DIR"
 
 log_info "Installation completed successfully!"
 log_info "Please restart your shell or computer to apply all changes."

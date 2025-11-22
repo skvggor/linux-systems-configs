@@ -47,8 +47,10 @@ install_system_tools() {
 
 setup_shell() {
   log_info "Setting up Fish shell..."
-  if command -v fish &>/dev/null && [ "$SHELL" != "$(which fish)" ]; then
-    chsh -s "$(which fish)"
+  if command -v fish &>/dev/null; then
+    if [ "$SHELL" != "$(which fish)" ]; then
+      chsh -s "$(which fish)"
+    fi
   fi
 }
 
