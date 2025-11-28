@@ -17,9 +17,9 @@ run_configs_setup() {
     ["${config_source_dir}/fish/zoxide-conf.fish"]="$HOME/.config/fish/zoxide-conf.fish"
     ["${config_source_dir}/lsd/config.yaml"]="$HOME/.config/lsd/config.yaml"
     ["${config_source_dir}/pulse.conf"]="$HOME/.config/pulse/daemon.conf"
-    ["${config_source_dir}/alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml"
-    ["${config_source_dir}/darktable/darktablerc"]="$HOME/.config/darktable/darktablerc"
+    ["${config_source_dir}/alacritty/alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml"
     ["${config_source_dir}/ghostty/config"]="$HOME/.config/ghostty/config"
+    ["${config_source_dir}/zellij/config.kdl"]="$HOME/.config/zellij/config.kdl"
   )
 
   for src_cfg in "${!config_map[@]}"; do
@@ -40,8 +40,9 @@ run_configs_setup() {
 
   dir_map=(
     ["${config_source_dir}/alacritty"]="$HOME/.config/alacritty"
-    ["${config_source_dir}/darktable"]="$HOME/.config/darktable"
+    ["${config_source_dir}/darktable/styles"]="$HOME/.config/darktable/styles"
     ["${config_source_dir}/konsole"]="$HOME/.local/share/konsole"
+    ["${config_source_dir}/zellij"]="$HOME/.config/zellij"
   )
 
   for src_dir in "${!dir_map[@]}"; do
