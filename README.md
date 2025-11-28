@@ -21,20 +21,23 @@ This project provides a modular installation script that automatically detects y
 ## Prerequisites
 
 - A supported Linux distribution.
-- `curl` and `git` (usually pre-installed or easily installable).
-- `sudo` privileges.
 
 ## How to Use
 
-1. **Clone** this repository:
+1. **Download** this repository:
+
+Click the green "Code" button and select "Download ZIP", or clone it using Git:
+
+![Download](assets/download.gif)
+
    ```bash
    git clone https://github.com/yourusername/linux-systems-configs.git
-   cd linux-systems-configs
+   cd  linux-systems-configs
    ```
 
 2. **Run the installation script**:
    ```bash
-   ./install.sh
+   bash install.sh
    ```
 
 3. **Follow the prompts** (you will need to enter your sudo password).
@@ -61,7 +64,8 @@ The installation logic is modularized in the `scripts/` directory:
 - **Editors**: VS Code Insiders, Micro
 - **Terminal**: Ghostty, Alacritty, Konsole
 - **Shell**: Fish (default), Starship (prompt)
-- **Tools**: Docker, Docker Compose, DBeaver CE, Git, JQ, Net-tools
+- **Tools**: Docker, Docker Compose, DBeaver CE, Insomnia, Git, JQ, Net-tools
+- **NPM Global**: gtop, localtunnel, svgo, vercel
 
 ### CLI Utilities
 - **Atuin**: Shell history sync
@@ -70,13 +74,19 @@ The installation logic is modularized in the `scripts/` directory:
 - **Nitch**: System fetch
 - **Zellij**: Terminal multiplexer
 - **Zoxide**: Smarter `cd`
+- **cmatrix**: Matrix-style animation
 
 ### Multimedia & Design
 - **Apps**: OBS Studio, Krita, Inkscape, Gimp, Darktable, VLC, Cheese
 - **Browsers**: Google Chrome, Microsoft Edge
 
+### Utilities
+- **Flameshot**: Screenshot tool
+- **Solaar**: Logitech device manager
+- **xclip**: Clipboard utility
+
 ### Fonts
-- **Nerd Fonts**: JetBrainsMono, FiraCode, Hack, Meslo, GeistMono
+- **Nerd Fonts**: JetBrainsMono, FiraCode, Hack, Meslo, GeistMono, Iosevka
 - **Monaspace**: GitHub's new font family
 
 ## Contributing

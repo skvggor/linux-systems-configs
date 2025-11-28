@@ -139,10 +139,29 @@ install_misc_apps() {
   install_packages flameshot solaar
 }
 
+install_insomnia() {
+  log_info "Installing Insomnia..."
+
+  case $PKG_MANAGER in
+    apt)
+      curl -1sLf 'https://packages.konghq.com/public/insomnia/setup.deb.sh' | sudo -E distro=ubuntu codename=focal bash
+      install_packages insomnia
+      ;;
+    dnf)
+      curl -1sLf 'https://packages.konghq.com/public/insomnia/setup.rpm.sh' | sudo -E bash
+      install_packages insomnia
+      ;;
+    pacman)
+      install_aur_packages insomnia-bin
+      ;;
+  esac
+}
+
 run_apps_setup() {
   install_design_apps
   install_docker
   install_dbeaver
+  install_insomnia
   install_browsers
   install_vscode
   install_misc_apps
