@@ -76,6 +76,9 @@ The installation logic is modularized in the `scripts/` directory:
 - **Zoxide**: Smarter `cd`
 - **cmatrix**: Matrix-style animation
 
+### Hyprland (Arch Linux only)
+- **Hyprmon**: System monitor and resource manager for Hyprland (installed automatically when Hyprland is detected)
+
 ### Multimedia & Design
 - **Apps**: OBS Studio, Krita, Inkscape, Gimp, Darktable, VLC, Cheese
 - **Browsers**: Google Chrome, Microsoft Edge
