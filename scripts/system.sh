@@ -63,9 +63,21 @@ setup_shell() {
   fi
 }
 
+install_hyprland_tools() {
+  if [ "$PKG_MANAGER" = "pacman" ]; then
+    if command -v hyprctl &>/dev/null || pacman -Qs hyprland &>/dev/null; then
+      log_info "Installing Hyprland tools (hyprmon)..."
+      install_aur_packages hyprmon-bin
+    else
+      log_info "Hyprland not detected, skipping hyprmon installation."
+    fi
+  fi
+}
+
 run_system_setup() {
   setup_directories
   install_essentials
   install_system_tools
+  install_hyprland_tools
   setup_shell
 }
