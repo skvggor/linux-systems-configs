@@ -1,11 +1,12 @@
-# Universal Configs and Installation Scripts
+# Linux Workstation Bootstrap
 
 A collection of **system configuration** and **package installation** scripts for various Linux distributions.
 
-Supported distributions:
-- **Ubuntu/Debian-like systems** (uses `apt`) - Tested in **Ubuntu Desktop 24.04.3 LTS**
-- **Arch-based systems** (uses `pacman` + `yay` + `aur`) - Tested in **Omarchy 3.2.0 (hyprland)**
-- **Fedora/Nobara/RHEL-like systems** (uses `dnf`) - Tested in **Fedora 43 Workstation**
+| Distribution | Tested On |
+|--------------|-----------|
+| **Ubuntu/Debian-like** (apt) | Ubuntu Desktop 24.04.3 LTS |
+| **Arch-based** (pacman + yay + aur) | Omarchy 3.2.0 (Hyprland) |
+| **Fedora/Nobara/RHEL-like** (dnf) | Fedora 43 Workstation |
 
 ## Overview
 
